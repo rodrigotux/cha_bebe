@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chá de Revelação - Victor & Larissa</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #e0f2fe 0%, #e0f2fe 50%, #fce7f3 50%, #fce7f3 100%);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 30px 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+            border: 6px dashed #cbd5e1;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            color: #475569;
+            font-size: 28px;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px #f1f5f9;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #64748b;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            font-family: 'Fredoka One', cursive;
+            display: block;
+            margin-bottom: 8px;
+            color: #475569;
+            font-size: 16px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 3px solid #cbd5e1;
+            border-radius: 15px;
+            font-size: 16px;
+            font-family: 'Quicksand', sans-serif;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #38bdf8;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .option-card {
+            position: relative;
+        }
+
+        .option-card input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .option-label {
+            display: block;
+            padding: 12px 10px;
+            background-color: #f8fafc;
+            border: 3px solid #e2e8f0;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 14px;
+            color: #64748b;
+            transition: all 0.2s ease;
+            user-select: none;
+            text-align: center;
+        }
+
+        /* Animação e cores dinâmicas dos botões infantis */
+        .gender-boy input[type="radio"]:checked + .option-label {
+            background-color: #bae6fd;
+            border-color: #38bdf8;
+            color: #0369a1;
+            transform: scale(1.05);
+        }
+
+        .gender-girl input[type="radio"]:checked + .option-label {
+            background-color: #fbcfe8;
+            border-color: #f472b6;
+            color: #be185d;
+            transform: scale(1.05);
+        }
+
+        .normal-option input[type="radio"]:checked + .option-label {
+            background-color: #fef08a;
+            border-color: #facc15;
+            color: #713f12;
+            transform: scale(1.05);
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #38bdf8 0%, #f472b6 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-family: 'Fredoka One', cursive;
+            font-size: 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-submit:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .results-section {
+            margin-top: 30px;
+            border-top: 4px dashed #e2e8f0;
+            padding-top: 20px;
+            text-align: left;
+        }
+
+        .results-title {
+            font-family: 'Fredoka One', cursive;
+            color: #475569;
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .guess-item {
+            background-color: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #475569;
+            line-height: 1.4;
+        }
+
+        .guess-item strong {
+            color: #0f172a;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Chá de Revelação</h1>
+        <div class="subtitle">Victor & Larissa</div>
+
+        <form id="palpiteForm">
+            <div class="input-group">
+                <label for="nome">Seu Nome:</label>
+                <input type="text" id="nome" placeholder="Digite seu nome aqui..." required>
+            </div>
+
+            <div class="input-group">
+                <label>O bebê será:</label>
+                <div class="options-grid">
+                    <div class="option-card gender-boy">
+                        <input type="radio" name="genero" id="boy" value="Menino 👦" required>
+                        <label for="boy" class="option-label">👦 Menino</label>
+                    </div>
+                    <div class="option-card gender-girl">
+                        <input type="radio" name="genero" id="girl" value="Menina 👧" required>
+                        <label for="girl" class="option-label">👧 Menina</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Vai nascer:</label>
+                <div class="options-grid">
+                    <div class="option-card normal-option">
+                        <input type="radio" name="cabelo" id="cabeludo" value="Cabeludo 👶" required>
+                        <label for="cabeludo" class="option-label">👶 Cabeludo</label>
+                    </div>
+                    <div class="option-card normal-option">
+                        <input type="radio" name="cabelo" id="careca" value="Carequinha 🧑‍🦲" required>
+                        <label for="careca" class="option-label">🧑‍🦲 Carequinha</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Horário do nascimento:</label>
+                <div class="options-grid">
+                    <div class="option-card normal-option">
+                        <input type="radio" name="periodo" id="manha" value="Manhã 🌅" required>
+                        <label for="manha" class="option-label">🌅 Manhã</label>
+                    </div>
+                    <div class="option-card normal-option">
+                        <input type="radio" name="periodo" id="tarde" value="Tarde ☀️" required>
+                        <label for="tarde" class="option-label">☀️ Tarde</label>
+                    </div>
+                    <div class="option-card normal-option">
+                        <input type="radio" name="periodo" id="noite" value="Noite 🌙" required>
+                        <label for="noite" class="option-label">🌙 Noite</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Como estará o tempo?</label>
+                <div class="options-grid">
+                    <div class="option-card normal-option">
+                        <input type="radio" name="clima" id="sol" value="Sol ☀️" required>
+                        <label for="sol" class="option-label">☀️ Sol</label>
+                    </div>
+                    <div class="option-card normal-option">
+                        <input type="radio" name="clima" id="nublado" value="Nublado ☁️" required>
+                        <label for="nublado" class="option-label">☁️ Nublado</label>
+                    </div>
+                    <div class="option-card normal-option">
+                        <input type="radio" name="clima" id="chovendo" value="Chovendo 🌧️" required>
+                        <label for="chovendo" class="option-label">🌧️ Chovendo</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Qual será o signo?</label>
+                <div class="options-grid">
+                    <div class="option-card normal-option">
+                        <input type="radio" name="signo" id="sagitario" value="Sagitário 🏹" required>
+                        <label for="sagitario" class="option-label">🏹 Sagitário</label>
+                    </div>
+                    <div class="option-card normal-option">
+                        <input type="radio" name="signo" id="capricornio" value="Capricórnio ♑" required>
+                        <label for="capricornio" class="option-label">♑ Capricórnio</label>
+                    </div>
+                    <div class="option-card normal-option">
+                        <input type="radio" name="signo" id="aquario" value="Aquário 🏺" required>
+                        <label for="aquario" class="option-label">🏺 Aquário</label>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit">Enviar Palpite! ✨</button>
+        </form>
+
+        <div class="results-section">
+            <div class="results-title">Palpites da Família 💕</div>
+            <div id="listaPalpites"></div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('palpiteForm');
+        const listaPalpites = document.getElementById('listaPalpites');
+
+        window.onload = function() {
+            exibirPalpites();
+        };
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const palpite = {
+                nome: document.getElementById('nome').value,
+                genero: document.querySelector('input[name="genero"]:checked').value,
+                cabelo: document.querySelector('input[name="cabelo"]:checked').value,
+                periodo: document.querySelector('input[name="periodo"]:checked').value,
+                clima: document.querySelector('input[name="clima"]:checked').value,
+                signo: document.querySelector('input[name="signo"]:checked').value
+            };
+
+            let palpitesSalvos = JSON.parse(localStorage.getItem('palpitesChadeRevelacao')) || [];
+            palpitesSalvos.push(palpite);
+            localStorage.setItem('palpitesChadeRevelacao', JSON.stringify(palpitesSalvos));
+
+            form.reset();
+            exibirPalpites();
+            alert('Palpite enviado com sucesso! 🎉');
+        });
+
+        function exibirPalpites() {
+            let palpitesSalvos = JSON.parse(localStorage.getItem('palpitesChadeRevelacao')) || [];
+            listaPalpites.innerHTML = '';
+
+            if (palpitesSalvos.length === 0) {
+                listaPalpites.innerHTML = '<p style="text-align:center; color:#94a3b8; font-size:14px;">Nenhum palpite ainda. Seja o primeiro!</p>';
+                return;
+            }
+
+            palpitesSalvos.reverse().forEach(p => {
+                const item = document.createElement('div');
+                item.className = 'guess-item';
+                item.innerHTML = `
+                    <strong>👶 ${p.nome}:</strong><br>
+                    • Será: ${p.genero}<br>
+                    • Cabelo: ${p.cabelo}<br>
+                    • Horário: ${p.periodo}<br>
+                    • Clima: ${p.clima}<br>
+                    • Signo: ${p.signo}
+                `;
+                listaPalpites.appendChild(item);
+            });
+        }
+    </script>
+</body>
+</html>
