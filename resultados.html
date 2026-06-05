@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Chá de Revelação - Victor & Larissa</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #e0f2fe 0%, #e0f2fe 50%, #fce7f3 50%, #fce7f3 100%);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 30px 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 700px;
+            width: 100%;
+            text-align: center;
+            border: 6px dashed #cbd5e1;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            color: #475569;
+            font-size: 32px;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px #f1f5f9;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #64748b;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .tab-btn {
+            font-family: 'Fredoka One', cursive;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            background-color: #e2e8f0;
+            color: #64748b;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #38bdf8 0%, #f472b6 100%);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .content-section {
+            display: none;
+            text-align: left;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .ranking-card {
+            background-color: #f8fafc;
+            border: 3px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .ranking-title {
+            font-family: 'Fredoka One', cursive;
+            color: #475569;
+            font-size: 18px;
+            margin-bottom: 15px;
+            border-bottom: 2px dashed #e2e8f0;
+            padding-bottom: 5px;
+        }
+
+        .ranking-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 8px 12px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+
+        .ranking-item.winner {
+            border: 2px solid #facc15;
+            background-color: #fef9c3;
+        }
+
+        .bar-container {
+            flex-grow: 1;
+            margin: 0 15px;
+            background-color: #e2e8f0;
+            border-radius: 8px;
+            height: 16px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #38bdf8, #f472b6);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .label-text {
+            font-weight: 700;
+            color: #475569;
+            min-width: 110px;
+        }
+
+        .count-text {
+            font-family: 'Fredoka One', cursive;
+            color: #64748b;
+            min-width: 50px;
+            text-align: right;
+        }
+
+        .guess-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .guess-table th, .guess-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .guess-table th {
+            background-color: #f1f5f9;
+            color: #475569;
+            font-family: 'Fredoka One', cursive;
+            font-size: 14px;
+        }
+
+        .guess-table td {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .guess-table tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .actions-container {
+            margin-top: 25px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-clear {
+            background-color: #ef4444;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-clear:hover {
+            background-color: #dc2626;
+        }
+
+        .no-data {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 16px;
+            padding: 40px 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Painel do Chá de Revelação</h1>
+        <div class="subtitle">Resultados & Rankings - Victor & Larissa</div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('rankings')">📊 Rankings</button>
+            <button class="tab-btn" onclick="switchTab('lista')">📋 Todos os Palpites</button>
+        </div>
+
+        <!-- ABA DE RANKINGS -->
+        <div id="rankings" class="content-section active">
+            <div id="rankingsContainer"></div>
+        </div>
+
+        <!-- ABA DE LISTA COMPLETA -->
+        <div id="lista" class="content-section">
+            <div style="overflow-x: auto;">
+                <table class="guess-table">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Gênero</th>
+                            <th>Cabelo</th>
+                            <th>Horário</th>
+                            <th>Tempo</th>
+                            <th>Signo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaPalpites"></tbody>
+                </table>
+            </div>
+            <div id="semDadosLista" class="no-data" style="display: none;">
+                Nenhum palpite registrado ainda no Tablet.
+            </div>
+        </div>
+
+        <div class="actions-container">
+            <button class="btn-clear" onclick="limparDados()">Resetar Painel ⚠️</button>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+            
+            event.currentTarget.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+            
+            if (tabId === 'rankings') { gerarRankings(); } else { gerarTabela(); }
+        }
+
+        function obterDados() {
+            return JSON.parse(localStorage.getItem('palpitesChadeRevelacao')) || [];
+        }
+
+        function calcularPercentual(votos, total) {
+            return total === 0 ? 0 : Math.round((votos / total) * 100);
+        }
+
+        function criarCardRanking(titulo, dadosAgrupados) {
+            const totalVotos = Object.values(dadosAgrupados).reduce((a, b) => a + b, 0);
+            const itensOrdenados = Object.entries(dadosAgrupados).sort((a, b) => b[1] - a[1]);
+            const maiorVoto = itensOrdenados[0] ? itensOrdenados[0][1] : 0;
+
+            let html = `<div class="ranking-card"><div class="ranking-title">${titulo}</div>`;
+            if (totalVotos === 0) {
+                return html + `<p style="color: #94a3b8; margin: 0;">Aguardando palpites...</p></div>`;
+            }
+
+            itensOrdenados.forEach(([opcao, votos]) => {
+                const pct = calcularPercentual(votos, totalVotos);
+                const isWinner = votos === maiorVoto && maiorVoto > 0;
+                html += `
+                    <div class="ranking-item ${isWinner ? 'winner' : ''}">
+                        <span class="label-text">${opcao}</span>
+                        <div class="bar-container"><div class="bar-fill" style="width: ${pct}%"></div></div>
+                        <span class="count-text">${votos} (${pct}%)</span>
+                    </div>`;
+            });
+            return html + `</div>`;
+        }
+
+        function gerarRankings() {
+            const palpites = obterDados();
+            const container = document.getElementById('rankingsContainer');
+            if (palpites.length === 0) {
+                container.innerHTML = '<div class="no-data">Nenhum palpite registrado ainda no Tablet.</div>';
+                return;
+            }
+
+            const dados = {
+                genero: { 'Menino 👦': 0, 'Menina 👧': 0 },
+                cabelo: { 'Cabeludo 👶': 0, 'Carequinha 🧑‍🦲': 0 },
+                periodo: { 'Manhã 🌅': 0, 'Tarde ☀️': 0, 'Noite 🌙': 0 },
+                clima: { 'Sol ☀️': 0, 'Nublado ☁️': 0, 'Chovendo 🌧️': 0 },
+                signo: { 'Sagitário 🏹': 0, 'Capricórnio ♑': 0, 'Aquário 🏺': 0 }
+            };
+
+            palpites.forEach(p => {
+                if (dados.genero[p.genero] !== undefined) dados.genero[p.genero]++;
+                if (dados.cabelo[p.cabelo] !== undefined) dados.cabelo[p.cabelo]++;
+                if (dados.periodo[p.periodo] !== undefined) dados.periodo[p.periodo]++;
+                if (dados.clima[p.clima] !== undefined) dados.clima[p.clima]++;
+                if (dados.signo[p.signo] !== undefined) dados.signo[p.signo]++;
+            });
+
+            container.innerHTML = criarCardRanking("👶 Gênero Mais Votado", dados.genero) +
+                                  criarCardRanking("💇 Cabelo ou Careca?", dados.cabelo) +
+                                  criarCardRanking("⏰ Período de Nascimento", dados.periodo) +
+                                  criarCardRanking("🌤️ Previsão do Tempo", dados.clima) +
+                                  criarCardRanking("🔮 Signo do Bebê", dados.signo);
+        }
+
+        function gerarTabela() {
+            const palpites = obterDados();
+            const tbody = document.getElementById('tabelaPalpites');
+            const semDados = document.getElementById('semDadosLista');
+            tbody.innerHTML = '';
+            
+            if (palpites.length === 0) {
+                semDados.style.display = 'block';
+                document.querySelector('.guess-table').style.display = 'none';
+                return;
+            }
+
+            semDados.style.display = 'none';
+            document.querySelector('.guess-table').style.display = 'table';
+
+            palpites.slice().reverse().forEach(p => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td style="font-weight: bold; color: #475569;">${p.nome}</td>
+                                <td>${p.genero}</td><td>${p.cabelo}</td><td>${p.periodo}</td>
+                                <td>${p.clima}</td><td>${p.signo}</td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function limparDados() {
+            if (confirm("Deseja apagar TODOS os palpites salvos neste Tablet?")) {
+                localStorage.removeItem('palpitesChadeRevelacao');
+                gerarRankings(); gerarTabela();
+            }
+        }
+        window.onload = function() { gerarRankings(); };
+    </script>
+</body>
+</html>
